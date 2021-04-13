@@ -3,6 +3,7 @@ import styled from "styled-components";
 import {Link} from "react-router-dom";
 import palette from "../../lib/styles/palette";
 import Button from "../common/Button";
+import {GoogleLogin} from "react-google-login";
 
 // 회원가입 또는 로그인 폼을 보여줍니다
 
@@ -58,54 +59,60 @@ const ErrorMessage = styled.div`
     margin-top: 1rem;
 `;
 
-
-
-
-
-const AuthForm = ({type, form, onChange, onSubmit, error}) => {
+const AuthForm = ({type, form, onChange, onSubmit, error, googleLogin}) => {
     const text = textMap[type];
+
     return (
-        <AuthFormBlock>
-            <h3>{text}</h3>
-            <form onSubmit={onSubmit}>
-                <StyledInput 
-                    autoComplete="username" 
-                    name="username" 
-                    placeholder="아이디"
-                    onChange={onChange}
-                    value={form.username}
-                />
-                <StyledInput 
-                    autoComplete="new-password" 
-                    name="password" 
-                    placeholder="비밀번호"
-                    type="password"
-                    onChange={onChange}
-                    value={form.password}
-                />
-                {type === "register" && (
-                    <StyledInput
-                        autoComplete="new-password"
-                        name="passwordConfirm"
-                        placeholder="비밀번호 확인"
+        <>
+            <AuthFormBlock>
+                <h3>{text}</h3>
+                <form onSubmit={onSubmit}>
+                    <StyledInput 
+                        autoComplete="username" 
+                        name="username" 
+                        placeholder="아이디"
+                        onChange={onChange}
+                        value={form.username}
+                    />
+                    <StyledInput 
+                        autoComplete="new-password" 
+                        name="password" 
+                        placeholder="비밀번호"
                         type="password"
                         onChange={onChange}
-                        value={form.passwordConfirm}
+                        value={form.password}
                     />
-                )}
-                {error && <ErrorMessage>{error}</ErrorMessage>}
-                <Button cyan fullWidth style={{marginTop:"1rem"}}>
-                    {text}
-                </Button>
-            </form>
-            <Footer>
-                {type === "login"? (
-                    <Link to="/register">회원가입</Link>
-                ) : (
-                    <Link to="/login">로그인</Link>
-                )}
-            </Footer>
-        </AuthFormBlock>
+                    {type === "register" && (
+                        <StyledInput
+                            autoComplete="new-password"
+                            name="passwordConfirm"
+                            placeholder="비밀번호 확인"
+                            type="password"
+                            onChange={onChange}
+                            value={form.passwordConfirm}
+                        />
+                    )}
+                    {error && <ErrorMessage>{error}</ErrorMessage>}
+                    <Button cyan fullWidth style={{marginTop:"1rem"}}>
+                        {text}
+                    </Button>
+                </form>
+                <Footer>
+                    {type === "login"? (
+                        <Link to="/register">회원가입</Link>
+                    ) : (
+                        <Link to="/login">로그인</Link>
+                    )}
+                </Footer>
+                <GoogleLogin 
+                    clientId=""
+                    buttonText="Login"
+                    onSuccess={googleLogin}
+                    onFailure={googleLogin}
+                    cookiePolicy={'single_host_origin'}
+                />
+            </AuthFormBlock>
+        </>
     );
 };
 

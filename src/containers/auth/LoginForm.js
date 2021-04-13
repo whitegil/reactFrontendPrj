@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
-import {changeField, initializeForm, login} from "../../modules/auth";
+import {changeField, initializeForm, login, googleLogin} from "../../modules/auth";
 import AuthForm from "../../component/auth/AuthForm";
 import {check} from "../../modules/user";
 import {withRouter} from "react-router-dom";
@@ -14,7 +14,8 @@ const LoginForm = ({history}) => {
         form: auth.login,
         auth: auth.auth,
         authError: auth.authError,
-        user: user.user
+        user: user.user,
+        userInfo: user.userInfo
     }));
 
     //인풋 변경 이벤트 핸들러
@@ -34,6 +35,12 @@ const LoginForm = ({history}) => {
         e.preventDefault();
         const{username, password} = form;
         dispatch(login({username, password}));
+    }
+
+    //구글로그인시 처리
+    const googleLoginSucess = e => {
+        const userInfo = e;
+        dispatch(googleLogin({userInfo}));
     }
 
     //컴포넌트가 처음 렌더링될 때 form을 초기화함
@@ -72,7 +79,8 @@ const LoginForm = ({history}) => {
             form={form}
             onChange={onChange}
             onSubmit={onSubmit}
-            error={error}>
+            error={error}
+            googleLogin={googleLoginSucess}>
         </AuthForm>
     )
 }

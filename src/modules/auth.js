@@ -16,6 +16,11 @@ const LOGIN = "auth/LOGIN"
 const LOGIN_SUCCESS = "auth/LOGIN_SUCCESS";
 const LOGIN_FAILURE = "auth/LOGIN_FAILURE";
 
+const GOOGLELOGIN = "auth/GOOGLELOGIN"
+const GOOGLELOGIN_SUCCESS = "auth/GOOGLELOGIN_SUCCESS";
+const GOOGLELOGIN_FAILURE = "auth/GOOGLELOGIN_FAILURE";
+
+
 export const changeField = createAction(
     CHANGE_FIELD,
     ({form, key, value}) => ({
@@ -38,13 +43,19 @@ export const login = createAction(LOGIN, ({username, password})=> ({
     password
 }))
 
+export const googleLogin = createAction(GOOGLELOGIN, ({userInfo})=> ({
+    userInfo
+}))
+
 //사가 생성
 const registerSaga = createRequestSaga(REGISTER, authAPI.register);
 const loginSaga = createRequestSaga(LOGIN, authAPI.login);
+const googleLoginSaga = createRequestSaga(LOGIN, authAPI.googleLogin);
 
 export function* authSaga() {
     yield takeLatest(REGISTER, registerSaga);
     yield takeLatest(LOGIN, loginSaga);
+    yield takeLatest(GOOGLELOGIN, googleLoginSaga);
 }
 
 
@@ -59,7 +70,8 @@ const initialState = {
         password: "",
     },
     auth: null,
-    authError: null
+    authError: null,
+    userInfo: null
 };
 
 const auth = handleActions(
@@ -92,6 +104,17 @@ const auth = handleActions(
         }),
         //로그인 실패
         [LOGIN_FAILURE]: (state, {payload: error}) => ({
+            ...state,
+            authError: error
+        }),
+        //구글 로그인 성공
+        [GOOGLELOGIN_SUCCESS]: (state, {payload:auth}) => ({
+            ...state,
+            authError: null,
+            auth,
+        }),
+        //로그인 실패
+        [GOOGLELOGIN_FAILURE]: (state, {payload: error}) => ({
             ...state,
             authError: error
         }),
