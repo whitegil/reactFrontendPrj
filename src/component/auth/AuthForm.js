@@ -59,8 +59,13 @@ const ErrorMessage = styled.div`
     margin-top: 1rem;
 `;
 
-const AuthForm = ({type, form, onChange, onSubmit, error, googleLogin}) => {
+
+const AuthForm = ({type, form, onChange, onSubmit, error, googleLogin, naverLogin}) => {
+
+
     const text = textMap[type];
+
+    //Login();
 
     return (
         <>
@@ -105,12 +110,13 @@ const AuthForm = ({type, form, onChange, onSubmit, error, googleLogin}) => {
                     )}
                 </Footer>
                 <GoogleLogin 
-                    clientId=""
+                    clientId="497176312003-7djfk69cuk3t251l9risk7vr0ib822mu.apps.googleusercontent.com"
                     buttonText="Login"
                     onSuccess={googleLogin}
                     onFailure={googleLogin}
                     cookiePolicy={'single_host_origin'}
                 />
+                <Link onClick={naverLogin} id="naverIdLogin">네이버 로그인</Link>
             </AuthFormBlock>
         </>
     );

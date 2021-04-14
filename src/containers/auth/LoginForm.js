@@ -43,6 +43,36 @@ const LoginForm = ({history}) => {
         dispatch(googleLogin({userInfo}));
     }
 
+    //네이버 로그인시 처리
+    const { naver } = window;
+
+    const naverLogin = () => {
+        Naver();
+        UserProfile();
+    }
+
+    const Naver = () => {
+        const naverLogin = new naver.LoginWithNaverId({
+            clientId: "e1KwXNIuObvulqlt0B_d",
+            callbackUrl: "http://localhost:8080/api/auth/naverLogin?naverLogin=true",
+            isPopup: true,
+            loginButton: { color: 'green', type: 3, height: '50' }
+        });
+        naverLogin.init();
+    };
+
+    const UserProfile = () => {
+        window.location.href.includes('access_token') && GetUser();
+        function GetUser() {
+          const location = window.location.href.split('=')[1];
+          const token = location.split('&')[0];
+          console.log("token: ", token);
+        }
+    };
+
+    useEffect(naverLogin, []);
+
+
     //컴포넌트가 처음 렌더링될 때 form을 초기화함
     useEffect(()=>{
         dispatch(initializeForm("login"));
@@ -80,7 +110,8 @@ const LoginForm = ({history}) => {
             onChange={onChange}
             onSubmit={onSubmit}
             error={error}
-            googleLogin={googleLoginSucess}>
+            googleLogin={googleLoginSucess}
+            naverLogin={naverLogin}>
         </AuthForm>
     )
 }
